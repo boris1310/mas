@@ -2151,6 +2151,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "AddCart",
@@ -2166,7 +2168,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       currentService: 1,
       choicedServices: [],
       showErrorFlag: false,
-      editType: ''
+      editType: '',
+      user: {
+        client_name: '',
+        client_tel: '',
+        description: ''
+      }
     };
   },
   methods: {
@@ -2208,7 +2215,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.showErrorFlag = true;
       setTimeout(function () {
         _this2.showErrorFlag = false;
-      }, 1500);
+      }, 1200);
     },
     addService: function addService() {
       var _this3 = this;
@@ -2441,11 +2448,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "editModal",
   props: {
@@ -2487,7 +2489,15 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_AddCart__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/AddCart */ "./resources/js/components/AddCart.vue");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_AddCart__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/AddCart */ "./resources/js/components/AddCart.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -2507,7 +2517,7 @@ window.Vue = (__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 
-Vue.component('add-cart', _components_AddCart__WEBPACK_IMPORTED_MODULE_0__["default"]);
+Vue.component('add-cart', _components_AddCart__WEBPACK_IMPORTED_MODULE_1__["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -2520,11 +2530,13 @@ var app = new Vue({
     return {
       flag: false,
       flagRequired: 0,
+      OrderId: '',
       record: {},
       mixing: {},
       lesson: {},
       rolik: {},
-      arrangment: {}
+      arrangment: {},
+      token: ''
     };
   },
   methods: {
@@ -2547,6 +2559,150 @@ var app = new Vue({
     saveArrangment: function saveArrangment(obj) {
       this.flagRequired--;
       this.arrangment = obj;
+    },
+    setServicesIntoOrder: function setServicesIntoOrder(service) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var csrfToken, response, result;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
+                _context.next = 3;
+                return fetch('/servicesIntoOrder', {
+                  headers: {
+                    'Content-Type': 'application/json',
+                    "X-CSRF-Token": csrfToken
+                  },
+                  method: "POST",
+                  body: JSON.stringify(service)
+                });
+
+              case 3:
+                response = _context.sent;
+                _context.next = 6;
+                return response.json();
+
+              case 6:
+                result = _context.sent;
+
+              case 7:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
+    createOrder: function createOrder(user) {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        var csrfToken, response, result, obj, res, stat;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
+                _context4.next = 3;
+                return fetch('/orders', {
+                  headers: {
+                    'Content-Type': 'application/json',
+                    "X-CSRF-Token": csrfToken
+                  },
+                  method: "POST",
+                  body: JSON.stringify(user)
+                });
+
+              case 3:
+                response = _context4.sent;
+                _context4.next = 6;
+                return response.json();
+
+              case 6:
+                result = _context4.sent;
+                _this.OrderId = result.id;
+                obj = {
+                  OrderId: _this.OrderId,
+                  record: _this.record,
+                  mixing: _this.mixing,
+                  lesson: _this.lesson,
+                  rolik: _this.rolik,
+                  arrangment: _this.arrangment
+                };
+                _context4.next = 11;
+                return fetch('/servicesIntoOrder', {
+                  headers: {
+                    'Content-Type': 'application/json',
+                    "X-CSRF-Token": csrfToken
+                  },
+                  method: "POST",
+                  body: JSON.stringify(obj)
+                });
+
+              case 11:
+                res = _context4.sent;
+                stat = res.json().then( /*#__PURE__*/function () {
+                  var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(resolve) {
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+                      while (1) {
+                        switch (_context2.prev = _context2.next) {
+                          case 0:
+                            if (!resolve.status) {
+                              _context2.next = 4;
+                              break;
+                            }
+
+                            document.getElementById('successBlock').style.display = 'block';
+                            _context2.next = 4;
+                            return setTimeout(function () {
+                              document.getElementById('successBlock').style.display = 'none';
+                            }, 1500);
+
+                          case 4:
+                          case "end":
+                            return _context2.stop();
+                        }
+                      }
+                    }, _callee2);
+                  }));
+
+                  return function (_x) {
+                    return _ref.apply(this, arguments);
+                  };
+                }())["catch"]( /*#__PURE__*/function () {
+                  var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(reject) {
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+                      while (1) {
+                        switch (_context3.prev = _context3.next) {
+                          case 0:
+                            document.getElementById('errorBlock').style.display = 'block';
+                            _context3.next = 3;
+                            return setTimeout(function () {
+                              document.getElementById('errorBlock').style.display = 'none';
+                            }, 1500);
+
+                          case 3:
+                          case "end":
+                            return _context3.stop();
+                        }
+                      }
+                    }, _callee3);
+                  }));
+
+                  return function (_x2) {
+                    return _ref2.apply(this, arguments);
+                  };
+                }());
+                window.location.reload();
+
+              case 14:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
     }
   }
 });
@@ -38834,9 +38990,73 @@ var render = function () {
     { staticClass: "mx-auto w-75 card p-3" },
     [
       _c("form", { staticClass: "row", attrs: { action: "/orders" } }, [
-        _vm._m(0),
+        _c("div", { staticClass: "col-6" }, [
+          _c("label", { staticClass: "form-label", attrs: { for: "name" } }, [
+            _vm._v("Client Name"),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model:value",
+                value: _vm.user.client_name,
+                expression: "user.client_name",
+                arg: "value",
+              },
+            ],
+            staticClass: "form-control my-1  px-3",
+            attrs: {
+              id: "name",
+              type: "text",
+              name: "name",
+              placeholder: "Client name",
+            },
+            domProps: { value: _vm.user.client_name },
+            on: {
+              input: function ($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.user, "client_name", $event.target.value)
+              },
+            },
+          }),
+        ]),
         _vm._v(" "),
-        _vm._m(1),
+        _c("div", { staticClass: "col-6" }, [
+          _c("label", { staticClass: "form-label", attrs: { for: "phone" } }, [
+            _vm._v("Phone Number"),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model:value",
+                value: _vm.user.client_tel,
+                expression: "user.client_tel",
+                arg: "value",
+              },
+            ],
+            staticClass: "form-control my-1  px-3",
+            attrs: {
+              id: "phone",
+              type: "phone",
+              name: "phone",
+              placeholder: "Phone Number",
+            },
+            domProps: { value: _vm.user.client_tel },
+            on: {
+              input: function ($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.user, "client_tel", $event.target.value)
+              },
+            },
+          }),
+        ]),
         _vm._v(" "),
         _c("div", { staticClass: "col-12 my-1" }, [
           _c("label", { staticClass: "form-label", attrs: { for: "name" } }, [
@@ -38978,12 +39198,30 @@ var render = function () {
       _c("label", { attrs: { for: "description" } }, [_vm._v("Примечание")]),
       _vm._v(" "),
       _c("textarea", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model:value",
+            value: _vm.user.description,
+            expression: "user.description",
+            arg: "value",
+          },
+        ],
         staticClass: "form-control",
         attrs: {
           name: "description",
           id: "description",
           cols: "30",
           rows: "10",
+        },
+        domProps: { value: _vm.user.description },
+        on: {
+          input: function ($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.$set(_vm.user, "description", $event.target.value)
+          },
         },
       }),
       _vm._v(" "),
@@ -38993,6 +39231,11 @@ var render = function () {
           {
             staticClass: "btn btn-primary",
             attrs: { disabled: _vm.flag !== 0 },
+            on: {
+              click: function ($event) {
+                return _vm.$root.createOrder(_vm.user)
+              },
+            },
           },
           [_vm._v("Добавить заказ")]
         ),
@@ -39001,48 +39244,7 @@ var render = function () {
     1
   )
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-6" }, [
-      _c("label", { staticClass: "form-label", attrs: { for: "name" } }, [
-        _vm._v("Client Name"),
-      ]),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control my-1  px-3",
-        attrs: {
-          id: "name",
-          type: "text",
-          name: "name",
-          placeholder: "Client name",
-        },
-      }),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-6" }, [
-      _c("label", { staticClass: "form-label", attrs: { for: "phone" } }, [
-        _vm._v("Phone Number"),
-      ]),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control my-1  px-3",
-        attrs: {
-          id: "phone",
-          type: "phone",
-          name: "phone",
-          placeholder: "Phone Number",
-        },
-      }),
-    ])
-  },
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -39229,6 +39431,7 @@ var render = function () {
                   "button",
                   {
                     staticClass: "btn btn-success",
+                    attrs: { "data-bs-dismiss": "modal" },
                     on: {
                       click: function ($event) {
                         return _vm.$root.saveRecord(_vm.record)
@@ -39305,6 +39508,7 @@ var render = function () {
                   "button",
                   {
                     staticClass: "btn btn-success",
+                    attrs: { "data-bs-dismiss": "modal" },
                     on: {
                       click: function ($event) {
                         return _vm.$root.saveMixing(_vm.mixing)
@@ -39379,6 +39583,7 @@ var render = function () {
                   "button",
                   {
                     staticClass: "btn btn-success",
+                    attrs: { "data-bs-dismiss": "modal" },
                     on: {
                       click: function ($event) {
                         return _vm.$root.saveLesson(_vm.lesson)
@@ -39494,6 +39699,7 @@ var render = function () {
                   "button",
                   {
                     staticClass: "btn btn-success",
+                    attrs: { "data-bs-dismiss": "modal" },
                     on: {
                       click: function ($event) {
                         return _vm.$root.saveRolik(_vm.rolik)
@@ -39611,6 +39817,7 @@ var render = function () {
                   "button",
                   {
                     staticClass: "btn btn-success",
+                    attrs: { "data-bs-dismiss": "modal" },
                     on: {
                       click: function ($event) {
                         return _vm.$root.saveArrangment(_vm.arrangment)

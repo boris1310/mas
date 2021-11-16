@@ -47,7 +47,7 @@
                             </tr>
                         </table>
                     </div>
-                    <button class="btn btn-success" @click="$root.saveRecord(record)">Сохранить</button>
+                    <button class="btn btn-success" @click="$root.saveRecord(record)" data-bs-dismiss="modal">Сохранить</button>
                 </div>
 
                 <div  v-else-if="editType=='Сведение'" class="modal-body">
@@ -73,7 +73,7 @@
                         </tr>
                     </table>
 
-                    <button class="btn btn-success" @click="$root.saveMixing(mixing)">Сохранить</button>
+                    <button class="btn btn-success" @click="$root.saveMixing(mixing)" data-bs-dismiss="modal">Сохранить</button>
 
                 </div>
 
@@ -99,7 +99,7 @@
                         </tr>
                     </table>
 
-                    <button class="btn btn-success" @click="$root.saveLesson(lesson)">Сохранить</button>
+                    <button class="btn btn-success" @click="$root.saveLesson(lesson)" data-bs-dismiss="modal">Сохранить</button>
 
                 </div>
 
@@ -130,7 +130,7 @@
                         </tr>
                     </table>
 
-                    <button class="btn btn-success" @click="$root.saveRolik(rolik)">Сохранить</button>
+                    <button class="btn btn-success" @click="$root.saveRolik(rolik)" data-bs-dismiss="modal">Сохранить</button>
 
                 </div>
 
@@ -161,16 +161,11 @@
                         </tr>
                     </table>
 
-                    <button class="btn btn-success" @click="$root.saveArrangment(arrangment)">Сохранить</button>
+                    <button class="btn btn-success" @click="$root.saveArrangment(arrangment)" data-bs-dismiss="modal">Сохранить</button>
 
                 </div>
 
-
                 <div class="modal-footer">
-
-
-
-
 
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                 </div>

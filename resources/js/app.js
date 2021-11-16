@@ -34,9 +34,11 @@ Vue.component('add-cart',AddCart);
 
 const app = new Vue({
     el: '#app',
+
     data:()=>({
         flag:false,
         flagRequired: 0,
+        OrderId:'',
         record:{
 
         },
@@ -51,7 +53,8 @@ const app = new Vue({
         },
         arrangment:{
 
-        }
+        },
+        token:''
     }),
     methods:{
         saveRecord(obj){
@@ -73,7 +76,66 @@ const app = new Vue({
         saveArrangment(obj){
             this.flagRequired--;
             this.arrangment = obj;
-        }
+        },
+        async setServicesIntoOrder(service){
+            const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
+            const response = await fetch('/servicesIntoOrder',{
+                headers: {
+                    'Content-Type': 'application/json',
+                    "X-CSRF-Token": csrfToken
+                },
+                method:"POST",
+                body: JSON.stringify(service),
+            });
+            const result = await response.json();
+        },
+        async createOrder(user){
+
+            const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
+            const response = await fetch('/orders',{
+                headers: {
+                    'Content-Type': 'application/json',
+                    "X-CSRF-Token": csrfToken
+                },
+                method:"POST",
+                body:JSON.stringify(user),
+            });
+            const result = await response.json();
+            this.OrderId = result.id;
+
+            const obj = {
+                OrderId:this.OrderId,
+                record:this.record,
+                mixing:this.mixing,
+                lesson:this.lesson,
+                rolik:this.rolik,
+                arrangment:this.arrangment
+            }
+
+            const res = await fetch('/servicesIntoOrder',{
+                headers: {
+                    'Content-Type': 'application/json',
+                    "X-CSRF-Token": csrfToken
+                },
+                method:"POST",
+                body: JSON.stringify(obj),
+            });
+            const stat = res.json().then(async resolve=>{
+                if(resolve.status){
+                    document.getElementById('successBlock').style.display = 'block';
+                    await setTimeout(()=>{
+                        document.getElementById('successBlock').style.display = 'none';
+                    },1500);
+                }
+            }).catch( async reject =>{
+                document.getElementById('errorBlock').style.display = 'block';
+                 await setTimeout(()=>{
+                    document.getElementById('errorBlock').style.display = 'none';
+                },1500);
+            });
+            window.location.reload();
+
+        },
     }
 });
 

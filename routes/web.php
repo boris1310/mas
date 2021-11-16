@@ -22,3 +22,6 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/services', [App\Http\Controllers\ServiceController::class, 'getAll'])->name('services');
 
+Route::post('/orders',[App\Http\Controllers\OrderController::class,'setOrder']);
+Route::post('/servicesIntoOrder',[\App\Http\Controllers\OrderServicesController::class,'setOrderServices']);
+

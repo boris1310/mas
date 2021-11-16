@@ -4,14 +4,15 @@
 
 
     <form action="/orders" class="row">
+
         <div class="col-6">
             <label for="name" class="form-label">Client Name</label>
-            <input class="form-control my-1  px-3" id="name" type="text" name="name" placeholder="Client name">
+            <input class="form-control my-1  px-3" id="name" type="text" v-model:value="user.client_name" name="name" placeholder="Client name">
         </div>
 
         <div class="col-6">
             <label for="phone" class="form-label">Phone Number</label>
-            <input class="form-control my-1  px-3" id="phone" type="phone" name="phone" placeholder="Phone Number">
+            <input class="form-control my-1  px-3" id="phone" type="phone" v-model:value="user.client_tel" name="phone" placeholder="Phone Number">
         </div>
 
         <div class="col-12 my-1">
@@ -56,10 +57,11 @@
         </div>
     <edit-modal :edit-type="editType"></edit-modal>
     <label for="description">Примечание</label>
-    <textarea name="description" id="description" class="form-control" cols="30" rows="10"></textarea>
+    <textarea name="description" id="description" v-model:value="user.description" class="form-control" cols="30" rows="10"></textarea>
     <div class="mx-auto my-5">
-        <button :disabled="flag!==0"  class="btn btn-primary">Добавить заказ</button>
+        <button :disabled="flag!==0" @click="$root.createOrder(user)"  class="btn btn-primary">Добавить заказ</button>
     </div>
+
 </div>
 
 </template>
@@ -78,6 +80,11 @@ export default {
         choicedServices:[],
         showErrorFlag:false,
         editType:'',
+        user:{
+            client_name:'',
+            client_tel:'',
+            description:'',
+        }
     }),
     methods:{
         async fetchServices(){
@@ -92,7 +99,7 @@ export default {
               this.showErrorFlag = true;
              setTimeout(()=>{
                  this.showErrorFlag = false;
-             },1500) ;
+             },1200) ;
         },
         addService(){
             this.services.map(i=>{
@@ -128,6 +135,7 @@ export default {
     },
     mounted(){
         this.fetchServices();
+
     }
 }
 </script>
